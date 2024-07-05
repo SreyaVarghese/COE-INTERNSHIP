@@ -1,0 +1,103 @@
+#Create the Flask Backend (app.py)
+#Ensure your backend is properly set up to serve the frontend files.
+
+from flask import Flask, render_template, request, jsonify
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+
+    if file:
+        filename = file.filename
+        file_path = os.path.join('uploads', filename)
+        file.save(file_path)
+
+        # Integrate DeepFace here for facial recognition
+        # result = deepface_function(file_path)
+
+        # For now, return a mock response
+        result = {'status': 'success', 'student_id': '12345'}
+
+        return jsonify(result)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+#Create the HTML Template (templates/index.html)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Attendance System</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="file" id="file-input" accept="image/*">
+            <button type="submit">Upload and Mark Attendance</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+
+ #Create the JavaScript File (static/js/script.js)
+
+document.getElementById('upload-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    let formData = new FormData();
+    let fileInput = document.getElementById('file-input');
+
+    if (fileInput.files.length > 0) {
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            let resultDiv = document.getElementById('result');
+            if (data.status === 'success') {
+                resultDiv.innerHTML = `Attendance marked for student ID: ${data.student_id}`;
+            } else {
+                resultDiv.innerHTML = `Error: ${data.error}`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
+
+# Install Dependencies and Run the Application
+
+#Ensure you have the required dependencies in requirements.txt:
+
+Flask
+pip install -r requirements.txt
+
+#Run the Flask application:
+python app.py
+
