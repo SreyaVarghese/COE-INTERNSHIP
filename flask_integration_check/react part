@@ -1,0 +1,163 @@
+Setup the React Project:
+
+npx create-react-app attendance-system
+cd attendance-system
+npm install axios
+npm install react-webcam
+
+# -----------------------------------------------------------------------
+Update src/App.js:
+jsx
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import Webcam from 'react-webcam';
+
+const App = () => {
+  const [webcamStarted, setWebcamStarted] = useState(false);
+  const [photoCaptured, setPhotoCaptured] = useState(false);
+  const [annotatedFrame, setAnnotatedFrame] = useState(null);
+  const [message, setMessage] = useState('');
+
+  const startWebcam = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/start_webcam');
+      if (response.data.status === 'success') {
+        setWebcamStarted(true);
+        setMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error starting webcam:', error);
+      setMessage('Error starting webcam');
+    }
+  };
+
+  const takePhoto = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/take_photo');
+      if (response.data.status === 'success') {
+        setPhotoCaptured(true);
+        setAnnotatedFrame(response.data.frame);
+        setMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error capturing photo:', error);
+      setMessage('Error capturing photo');
+    }
+  };
+
+  const updateAttendance = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/update_attendance');
+      if (response.data.status === 'success') {
+        setPhotoCaptured(false);
+        setWebcamStarted(true);
+        setMessage('Attendance marked successfully');
+      }
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+      setMessage('Error updating attendance');
+    }
+  };
+
+  const takeAnotherPhoto = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/take_another_photo');
+      if (response.data.status === 'success') {
+        setPhotoCaptured(false);
+        setWebcamStarted(true);
+        setMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error taking another photo:', error);
+      setMessage('Error taking another photo');
+    }
+  };
+
+  const endSession = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/end_session');
+      if (response.data.status === 'success') {
+        setWebcamStarted(false);
+        setPhotoCaptured(false);
+        setAnnotatedFrame(null);
+        setMessage('Webcam session ended');
+      }
+    } catch (error) {
+      console.error('Error ending session:', error);
+      setMessage('Error ending session');
+    }
+  };
+
+  return (
+    <div>
+      <h1>College Attendance System</h1>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: 1 }}>
+          {webcamStarted && !photoCaptured && <Webcam />}
+          {photoCaptured && annotatedFrame && (
+            <img
+              src={`data:image/jpeg;base64,${annotatedFrame}`}
+              alt="Annotated Frame"
+              style={{ width: '100%' }}
+            />
+          )}
+        </div>
+        <div style={{ flex: 1, marginLeft: '20px' }}>
+          <button onClick={startWebcam} disabled={webcamStarted}>
+            Start Webcam
+          </button>
+          <button onClick={takePhoto} disabled={!webcamStarted || photoCaptured}>
+            Take Photo
+          </button>
+          <button onClick={updateAttendance} disabled={!photoCaptured}>
+            Update Attendance
+          </button>
+          <button onClick={takeAnotherPhoto} disabled={!photoCaptured}>
+            Take Another Photo
+          </button>
+          <button onClick={endSession}>
+            End Webcam
+          </button>
+        </div>
+      </div>
+      {message && <p>{message}</p>}
+    </div>
+  );
+};
+
+export default App;
+
+# -------------------------------------------------------------------------
+Flask Backend:
+export FLASK_APP=app.py
+flask run
+
+# ------------------------------------------------------------------------
+
+Explanation:
+attendance_system.py:
+
+Global Variables: Used to store the webcam instance, captured frame, recognized names, and duplicate names.
+Functions:
+start_webcam(): Starts the webcam.
+capture_frame(): Captures a frame, recognizes faces, and annotates the frame.
+recognize_faces2(): Recognizes faces in the captured frame.
+annotate_frame(): Annotates the frame with bounding boxes and names.
+update_attendance(): Updates attendance based on recognized names.
+end_session(): Ends the webcam session.
+app.py:
+
+API Endpoints:
+/start_webcam: Starts the webcam.
+/take_photo: Captures a photo and returns the annotated frame.
+/update_attendance: Updates attendance in the database.
+/take_another_photo: Prepares for taking another photo by clearing the global variables.
+/end_session: Ends the webcam session.
+
+Workflow:
+Start Webcam: Hit the /start_webcam endpoint to start the webcam.
+Take Photo: Hit the /take_photo endpoint to capture a photo, recognize faces, and return the annotated frame.
+Update Attendance: Hit the /update_attendance endpoint to update attendance in the database.
+Take Another Photo: Hit the /take_another_photo endpoint to prepare for taking another photo.
+End Session: Hit the /end_session endpoint to close the webcam and clean up resources.
