@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+// App.js
+import React, { useState } from 'react';
+import axios from 'axios';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import AboutUs from './components/AboutUs';
+import Team from './components/Team';
+import SmartAttendance from './components/SmartAttendance';
 import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+import 'bootstrap/dist/css/bootstrap.min.css';
+const App = () => {
+   return (
+    <Router>
+      <Navbar />
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/attendance" element={<SmartAttendance />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

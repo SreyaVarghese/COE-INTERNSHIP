@@ -1,0 +1,83 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0px;
+    background-color: #f0f0f0;
+    background-size: cover;
+    background-position: center;
+    color: #fcf5f5;
+}
+.home-container {
+    padding-top: 80px; /* Adjust as needed based on your navbar height */
+  }
+
+/* Navbar styles */
+.navbar {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+.navbar h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Main content styles */
+.content {
+    padding: 100px 20px;
+    text-align: center;
+    margin-top: 80px;
+}
+.content h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.content p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+.content a {
+    display: inline-block;
+    background-color: #2b338e;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+.content a:hover {
+    background-color: #45a049;
+}
+
+/* Footer styles */
+.footer {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .content {
+        padding: 80px 10px;
+    }
+    .content h2 {
+        font-size: 28px;
+    }
+    .content p {
+        font-size: 16px;
+    }
+    .navbar h1 {
+        font-size: 20px;
+    }
+}

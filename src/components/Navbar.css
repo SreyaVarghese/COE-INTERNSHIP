@@ -1,0 +1,18 @@
+.navbar {
+    background-color: #070807; /* Green background color */
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+
+  }
+  
+  .navbar-brand, .nav-link {
+    color: white !important; /* White text color */
+  }
+  
+  .nav-link:hover {
+    color: #f1f1f1 !important; /* Slightly lighter text color on hover */
+  }
+  
