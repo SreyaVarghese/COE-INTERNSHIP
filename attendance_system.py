@@ -134,7 +134,7 @@ def process_image_file(image_path):
 #    annotated_frame, recognized_names = recognize_faces2(frame, 'known_faces')
 #    return annotated_frame.tolist(), recognized_names
 
-def update_attendance(names):
+def update_attendance(recognized_names_global):
     csv_file = 'attendance.csv'
     file_exists = os.path.isfile(csv_file)
     unknown_names=0
@@ -159,7 +159,7 @@ def update_attendance(names):
         if not file_exists:
             writer.writerow(['Name', 'Attendance Time'])
         
-        for name in names:
+        for name in recognized_names_global:
             if name in attendance_dict:
                 last_attendance_time = attendance_dict[name]
                 time_diff = current_time - last_attendance_time

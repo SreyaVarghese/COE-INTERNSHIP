@@ -95,7 +95,7 @@ def upload_image_route():
 @app.route('/update_attendance', methods=['POST'])
 def update_attendance_route():
     try:
-        unknown_names, duplicate_names = update_attendance()
+        unknown_names, duplicate_names = update_attendance(recognized_names_global)
         return jsonify({'status': 'success', 'unknown_names': unknown_names, 'duplicate_names': duplicate_names})
     except Exception as e:
         app.logger.error(f'Error updating attendance: {e}')

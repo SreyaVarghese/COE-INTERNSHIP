@@ -6,7 +6,7 @@ const Home = () => {
     <div>
 
       <div className="content">
-        <h2 style={{fontSize:60}}>Welcome to our Attendance System</h2>
+        <h2 style={{fontSize:60}}>Welcome to our Smart Attendance System Your Smart Companion</h2>
         <p style={{fontSize:25}}>
           Manage attendance effortlessly with our smart system. Click below to
           get started.

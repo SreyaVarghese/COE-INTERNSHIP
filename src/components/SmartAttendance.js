@@ -105,7 +105,7 @@ const SmartAttendance = () => {
       ) : (
         <>
           <button style={{fontSize:20}} onClick={capturePhoto}>Capture Photo</button>
-          {/*<button style={{fontSize:20}} onClick={updateAttendance}>Update Attendance</button>*/}
+          <button style={{fontSize:20}} onClick={updateAttendance}>Update Attendance</button>
           <form onSubmit={uploadImage}>
             <input style={{fontSize:20}} type="file" name="image" accept="image/*" />
             <button style={{fontSize:20}} type="submit">Upload Image</button>
